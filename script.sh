@@ -16,9 +16,12 @@ if ! command -v netstat &> /dev/null; then
   sudo apt install -y net-tools
 fi
 
-#change passwords
-while IFS= read -r user; do
-  echo "$user:4blue3team" | sudo chpasswd
+# Change passwords for all users listed in /etc/passwd (excluding system users)
+while IFS=: read -r user _; do
+  # Exclude system users (e.g., those with UID < 1000)
+  if [ "$(id -u "$user")" -ge 1000 ]; then
+    echo "$user:4blue3team" | sudo chpasswd
+  fi
 done < /etc/passwd
 
 echo "Setting up a firewall to block all traffic..."
