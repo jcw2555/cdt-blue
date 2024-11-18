@@ -22,12 +22,24 @@ if ! command -v netstat &> /dev/null; then
 fi
 
 # Change passwords for all users listed in /etc/passwd (excluding system users)
-while IFS=: read -r user _; do
-  # Exclude system users (e.g., those with UID < 1000)
-  if [ "$(id -u "$user")" -ge 1000 ]; then
-    echo "$user:4blue3team" | sudo chpasswd
-  fi
-done < /etc/passwd
+USER_LIST=$(awk -F: '$3 >= 1000 && $3 < 65534 {print $1}' /etc/passwd)
+EXCLUDED_USERS=("greyteam" "grayteam" "blackteam")
+# Loop through each user and set a new password
+for USER in $USER_LIST; do
+    # Change the user's password
+    if [[ " ${EXCLUDED_USERS[@]} " =~ " $USER " ]]; then
+        echo "Skipping user: $USER"
+        continue
+    fi
+    
+    echo "$USER:3blue3team" | sudo chpasswd
+    
+    if [[ $? -eq 0 ]]; then
+        echo "Password successfully changed for user: $USER"
+    else
+        echo "Failed to change password for user: $USER"
+    fi
+done
 
 echo "Setting up a firewall to block all traffic..."
 
