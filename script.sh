@@ -109,7 +109,7 @@ ps aux               # Check all running processes
 netstat -tulnp       # Show listening services and their ports
 
 # List of services to check, stop, and disable
-services=("cron" "sudo" "apache2" "mysql" "smbd" "rpcbind" "cups" "postfix" "vsftpd" #"ssh")
+services=("cron" "sudo" "apache2" "mysql" "smbd" "rpcbind" "cups" "postfix" "vsftpd") #"ssh")
 
 for service in "${services[@]}"; do
     # Check if the service is installed
