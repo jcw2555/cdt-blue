@@ -1,0 +1,5 @@
+chmod +x script.sh
+sudo ./secure_host.sh
+
+verify
+- firewall rules: sudo iptables -L -v
