@@ -1,8 +1,28 @@
 chmod +x script.sh
-sudo ./secure_host.sh
+sudo ./script.sh
 
 verify
-- firewall rules: sudo iptables -L -v
+    firewall rules: sudo iptables -L -v
 
 root passwd change:
-sudo passwd root
+    sudo passwd root
+
+lock redteam/weird users
+    sudo passwd -l username
+
+or disable users
+    sudo usermod -s /sbin/nologin username
+
+double check crontab to make sure it's empty
+    Current user’s crontab: crontab -l
+    Another user’s crontab: sudo crontab -l -u username
+    System-wide cron jobs: Check /etc/crontab, /etc/cron.d/, /etc/cron.daily/, etc.
+
+removing crontab/cronjobs
+    Current user’s crontab: crontab -r
+    Another user’s crontab: sudo crontab -r -u username
+    System-wide cron jobs: Delete files in /etc/crontab, /etc/cron.d/, /etc/cron.daily/, /etc/cron.hourly/, etc.
+    Delete all user cron jobs: sudo rm -rf /var/spool/cron/crontabs/*
+
+delete contents of .ssh/authorized_keys
+    you know what to do
