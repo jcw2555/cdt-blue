@@ -135,13 +135,13 @@ if [[ ! -f "$SSHD_CONFIG" ]]; then
 fi
 
 # Modify PasswordAuthentication to 'no'
-echo "Modifying PasswordAuthentication to 'no'..."
-if grep -q "^PasswordAuthentication" "$SSHD_CONFIG"; then
-  sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' "$SSHD_CONFIG"
-else
-  echo "PasswordAuthentication entry not found, adding it..."
-  echo "PasswordAuthentication no" | sudo tee -a "$SSHD_CONFIG" > /dev/null
-fi
+#echo "Modifying PasswordAuthentication to 'no'..."
+#if grep -q "^PasswordAuthentication" "$SSHD_CONFIG"; then
+#  sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' "$SSHD_CONFIG"
+#else
+#  echo "PasswordAuthentication entry not found, adding it..."
+#  echo "PasswordAuthentication no" | sudo tee -a "$SSHD_CONFIG" > /dev/null
+#fi
 
 # Modify UsePAM to 'no'
 echo "Modifying UsePAM to 'no'..."
