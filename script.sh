@@ -19,7 +19,7 @@ fi
 #change passwords
 while IFS= read -r user; do
   echo "$user:4blue3team" | sudo chpasswd
-done < /tmp/users
+done < /etc/passwd
 
 echo "Setting up a firewall to block all traffic..."
 
@@ -100,6 +100,42 @@ sudo apt autoclean
 # Stop and disable the SSH daemon
 # sudo systemctl stop sshd
 # sudo systemctl disable sshd
+
+#!/bin/bash
+
+# Define the path to the sshd_config file
+SSHD_CONFIG="/etc/ssh/sshd_config"
+
+# Ensure the sshd_config file exists
+if [[ ! -f "$SSHD_CONFIG" ]]; then
+  echo "Error: $SSHD_CONFIG not found!"
+  exit 1
+fi
+
+# Modify PasswordAuthentication to 'no'
+echo "Modifying PasswordAuthentication to 'no'..."
+if grep -q "^PasswordAuthentication" "$SSHD_CONFIG"; then
+  sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' "$SSHD_CONFIG"
+else
+  echo "PasswordAuthentication entry not found, adding it..."
+  echo "PasswordAuthentication no" | sudo tee -a "$SSHD_CONFIG" > /dev/null
+fi
+
+# Modify UsePAM to 'no'
+echo "Modifying UsePAM to 'no'..."
+if grep -q "^UsePAM" "$SSHD_CONFIG"; then
+  sudo sed -i 's/^UsePAM yes/UsePAM no/' "$SSHD_CONFIG"
+else
+  echo "UsePAM entry not found, adding it..."
+  echo "UsePAM no" | sudo tee -a "$SSHD_CONFIG" > /dev/null
+fi
+
+# Restart SSH service to apply changes
+echo "Restarting SSH service..."
+sudo systemctl restart ssh
+
+echo "SSH configuration modified and service restarted."
+
 
 #!/bin/bash
 
