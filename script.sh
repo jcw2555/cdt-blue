@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Reinstall PAM modules
+echo "Reinstalling PAM modules..."
+sudo apt-get update
+sudo apt-get --reinstall install -y libpam-runtime libpam-modules
+
 echo "Checking if iptables and netstat (or ss) are installed..."
 
 # Install iptables if not present
@@ -153,10 +158,6 @@ sudo systemctl restart ssh
 
 echo "SSH configuration modified and service restarted."
 
-# Reinstall PAM modules
-echo "Reinstalling PAM modules..."
-sudo apt-get update
-sudo apt-get --reinstall install -y libpam-runtime libpam-modules
 
 #!/bin/bash
 
