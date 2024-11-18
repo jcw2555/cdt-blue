@@ -3,3 +3,6 @@ sudo ./secure_host.sh
 
 verify
 - firewall rules: sudo iptables -L -v
+
+root passwd change:
+sudo passwd root

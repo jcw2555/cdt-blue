@@ -78,17 +78,22 @@ echo "Wazuh configuration files have been backed up to /backup/wazuh-config."
 echo clearing out crontab
 crontab -r
 
-#Clear out /.ssh
-SSH_DIR="$HOME/.ssh"
-
-if [ -d "$SSH_DIR" ]; then
-  echo "Deleting all contents of $SSH_DIR..."
-  
-  rm -rf "$SSH_DIR"/*
-  
-  echo "All contents of $SSH_DIR have been deleted."
+# Check if the SSH directory exists in the user's home directory
+if [ -d "$HOME/.ssh" ]; then
+  echo "Deleting all contents of $HOME/.ssh..."
+  rm -rf "$HOME/.ssh/*"
+  echo "All contents of $HOME/.ssh have been deleted."
 else
-  echo "No .ssh directory found at $SSH_DIR."
+  echo "No .ssh directory found at $HOME."
+fi
+
+# Check if the SSH directory exists in root's home directory (for root user)
+if [ -d "/root/.ssh" ]; then
+  echo "Deleting all contents of /root/.ssh..."
+  sudo rm -rf /root/.ssh/*
+  echo "All contents of /root/.ssh have been deleted."
+else
+  echo "No .ssh directory found at /root."
 fi
 
 #delete python because fuck you
