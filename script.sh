@@ -1,4 +1,20 @@
-#/bin/bash
+#!/bin/bash
+
+echo "Checking if iptables and netstat (or ss) are installed..."
+
+# Install iptables if not present
+if ! command -v iptables &> /dev/null; then
+  echo "iptables not found. Installing iptables..."
+  sudo apt update && sudo apt install -y iptables
+else
+  echo "iptables is already installed."
+fi
+
+# Install net-tools if netstat is not available, or use ss as an alternative
+if ! command -v netstat &> /dev/null; then
+  echo "netstat not found. Installing net-tools..."
+  sudo apt install -y net-tools
+fi
 
 #change passwords
 while IFS= read -r user; do
