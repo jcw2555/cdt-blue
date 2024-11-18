@@ -50,6 +50,15 @@ sudo iptables -A INPUT -p tcp --dport 55000 -j ACCEPT
 # Allow incoming Kibana connections on port 5601/tcp (if used with Wazuh)
 sudo iptables -A INPUT -p tcp --dport 5601 -j ACCEPT
 
+# Allow ssh
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+
+# Allow traffic from/to the management subnet (192.168.1.0/24)
+# (Although this is considered out of scope, we should ensure it is not blocked)
+sudo iptables -A INPUT -s 192.168.1.0/24 -j ACCEPT
+sudo iptables -A OUTPUT -d 192.168.1.0/24 -j ACCEPT
+
 # Log dropped packets (optional, can help with debugging)
 sudo iptables -A INPUT -j LOG --log-prefix "iptables-blocked: "
 sudo iptables -A OUTPUT -j LOG --log-prefix "iptables-blocked: "
@@ -136,6 +145,10 @@ sudo systemctl restart ssh
 
 echo "SSH configuration modified and service restarted."
 
+# Reinstall PAM modules
+echo "Reinstalling PAM modules..."
+sudo apt-get update
+sudo apt-get --reinstall install -y libpam-runtime libpam-modules
 
 #!/bin/bash
 
