@@ -179,22 +179,3 @@ ps aux               # Check all running processes
 netstat -tulnp       # Show listening services and their ports
 
 # List of services to check, stop, and disable
-services=("cron" "sudo" "apache2" "mysql" "smbd" "rpcbind" "cups" "postfix" "vsftpd") #"ssh")
-
-for service in "${services[@]}"; do
-    # Check if the service is installed
-    if systemctl list-units --type=service | grep -q "$service.service"; then
-        echo "Service '$service' is installed."
-
-        # Stop the service
-        echo "Stopping $service..."
-        sudo systemctl stop "$service.service"
-
-        # Disable the service
-        echo "Disabling $service..."
-        sudo systemctl disable "$service.service"
-        echo "$service has been stopped and disabled."
-    else
-        echo "Service '$service' is not installed."
-    fi
-done
